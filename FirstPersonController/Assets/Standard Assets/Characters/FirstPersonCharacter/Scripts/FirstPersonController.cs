@@ -10,10 +10,8 @@ namespace UnityStandardAssets.Characters.FirstPerson
     [RequireComponent(typeof (AudioSource))]
     public class FirstPersonController : MonoBehaviour
     {
-
-        [SerializeField] private bool m_IsAnimating;
-
-        [SerializeField] private bool m_IsWalking;
+		[SerializeField] private bool m_IsAnimating;
+		[SerializeField] private bool m_IsWalking;
         [SerializeField] private float m_WalkSpeed;
         [SerializeField] private float m_RunSpeed;
         [SerializeField] [Range(0f, 1f)] private float m_RunstepLenghten;
@@ -66,20 +64,21 @@ namespace UnityStandardAssets.Characters.FirstPerson
         {
 			if(!m_IsAnimating){
 				RotateView();
-
 				// the jump state needs to read here to make sure it is not missed
-				if (!m_Jump) {
+				if (!m_Jump)
+				{
 					m_Jump = CrossPlatformInputManager.GetButtonDown("Jump");
 				}
 
-				if (!m_PreviouslyGrounded && m_CharacterController.isGrounded) {
+				if (!m_PreviouslyGrounded && m_CharacterController.isGrounded)
+				{
 					StartCoroutine(m_JumpBob.DoBobCycle());
 					PlayLandingSound();
 					m_MoveDir.y = 0f;
 					m_Jumping = false;
 				}
-
-				if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded) {
+				if (!m_CharacterController.isGrounded && !m_Jumping && m_PreviouslyGrounded)
+				{
 					m_MoveDir.y = 0f;
 				}
 
@@ -107,7 +106,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				// get a normal for the surface that is being touched to move along it
 				RaycastHit hitInfo;
 				Physics.SphereCast(transform.position, m_CharacterController.radius, Vector3.down, out hitInfo,
-								   m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
+									m_CharacterController.height / 2f, Physics.AllLayers, QueryTriggerInteraction.Ignore);
 				desiredMove = Vector3.ProjectOnPlane(desiredMove, hitInfo.normal).normalized;
 
 				m_MoveDir.x = desiredMove.x * speed;
@@ -129,8 +128,11 @@ namespace UnityStandardAssets.Characters.FirstPerson
 				m_CollisionFlags = m_CharacterController.Move(m_MoveDir * Time.fixedDeltaTime);
 
 				ProgressStepCycle(speed);
+				UpdateCameraPosition(speed);
+
+				m_MouseLook.UpdateCursorLock();
 			}
-		}
+        }
 
 
         private void PlayJumpSound()
@@ -187,7 +189,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
             {
                 m_Camera.transform.localPosition =
                     m_HeadBob.DoHeadBob(m_CharacterController.velocity.magnitude +
-                                        (speed*(m_IsWalking ? 1f : m_RunstepLenghten)));
+                                      (speed*(m_IsWalking ? 1f : m_RunstepLenghten)));
                 newCameraPosition = m_Camera.transform.localPosition;
                 newCameraPosition.y = m_Camera.transform.localPosition.y - m_JumpBob.Offset();
             }
@@ -196,7 +198,7 @@ namespace UnityStandardAssets.Characters.FirstPerson
                 newCameraPosition = m_Camera.transform.localPosition;
                 newCameraPosition.y = m_OriginalCameraPosition.y - m_JumpBob.Offset();
             }
-			m_Camera.transform.localPosition = newCameraPosition;
+            m_Camera.transform.localPosition = newCameraPosition;
         }
 
 
