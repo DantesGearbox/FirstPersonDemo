@@ -1,0 +1,2 @@
+D:\Unity Projects\PostApocalypse\Temp\UnityVS_obj\Debug\PostApocalypse.csprojResolveAssemblyReference.cache
+D:\Unity Projects\PostApocalypse\Temp\UnityVS_obj\Debug\PostApocalypse.csproj.CoreCompileInputs.cache
